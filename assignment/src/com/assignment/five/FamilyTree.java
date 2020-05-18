@@ -1,5 +1,6 @@
 package com.assignment.five;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
@@ -57,6 +58,39 @@ public class FamilyTree {
         }
     }
 
+    public ArrayList<String> findAllTheSons(String father, Node root){
+        ArrayList<String> sons = new ArrayList<>();
+
+        Queue<Node> queue = new LinkedList<>(); 
+        queue.add(root);
+        while (!queue.isEmpty())
+        {
+            int n = queue.size();
+            while (n > 0)
+            {
+                Node p = queue.peek();
+                queue.remove();
+
+                //check if the input node is the current one
+                if(p.key == father){
+                    for (int i = 0; i < p.child.size(); i++)
+                    {
+                        sons.add(p.child.get(i).key);
+                    }
+                    return sons;
+                }
+
+                for (int i = 0; i < p.child.size(); i++)
+                    {
+                        queue.add(p.child.get(i));
+                    }
+            }
+            n--;
+            }
+
+        return sons;
+    }
+
     public static void main(String[] args) {
         /*
          *      Jones
@@ -69,6 +103,9 @@ public class FamilyTree {
          * */
 
         FamilyTree familyTree = new FamilyTree();
+        ArrayList<String> returnResult = new ArrayList<>();
+        String input;
+
         Node root = newNode("Jones");
         (root.child).add(newNode("Bob"));
         (root.child).add(newNode("Dan"));
@@ -86,7 +123,19 @@ public class FamilyTree {
         System.out.println("---Family Tree Level Wise---");
         familyTree.printTreeLevelWise(root);
 
+        System.out.println("\n\n-------Operations-------\n");
 
+        //familyTree.findFather("Bob", root);
+
+        /* 2) Who are all the sons of p? */
+        input = "Brian";
+        returnResult = familyTree.findAllTheSons(input, root);
+        if(returnResult.size()==0){
+            System.out.println(input + " doesn't have any son/s.\n");
+        }else {
+            System.out.println("All the son/s of "+input+ " : "+returnResult);
+
+        }
 
 
     }
