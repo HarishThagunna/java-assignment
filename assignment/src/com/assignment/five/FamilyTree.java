@@ -105,7 +105,7 @@ public class FamilyTree {
     public ArrayList<String> findAllTheSons(String father, Node root){
         ArrayList<String> sons = new ArrayList<>();
 
-        Queue<Node> queue = new LinkedList<>(); 
+        Queue<Node> queue = new LinkedList<>();
         queue.add(root);
         while (!queue.isEmpty())
         {
@@ -125,12 +125,12 @@ public class FamilyTree {
                 }
 
                 for (int i = 0; i < p.child.size(); i++)
-                    {
-                        queue.add(p.child.get(i));
-                    }
+                {
+                    queue.add(p.child.get(i));
+                }
             }
             n--;
-            }
+        }
 
         return sons;
     }
@@ -142,6 +142,66 @@ public class FamilyTree {
         brothers = findAllTheSons(father,root);
         brothers.remove(input);;
         return brothers;
+    }
+
+    public String findOldestBrother(String bro, Node root){
+        String brother = "";
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root); // Enqueue root
+        while (!queue.isEmpty())
+        {
+            int n = queue.size();
+
+            while (n > 0)
+            {
+                Node p = queue.peek();
+                queue.remove();
+
+                for (int i = 0; i < p.child.size(); i++)
+                {
+                    if(p.child.get(i).key == bro){
+                        brother = p.child.get(0).key;
+                        return brother;
+                    }else{
+                        queue.add(p.child.get(i));
+                    }
+                }
+                n--;
+            }
+        }
+
+        return brother;
+    }
+
+    public String findYoungestBrother(String bro, Node root){
+        String brother = "";
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root); // Enqueue root
+        while (!queue.isEmpty())
+        {
+            int n = queue.size();
+
+            while (n > 0)
+            {
+                Node p = queue.peek();
+                queue.remove();
+
+                for (int i = 0; i < p.child.size(); i++)
+                {
+                    if(p.child.get(i).key == bro){
+                        brother = p.child.get(p.child.size()-1).key;
+                        return brother;
+                    }else{
+                        queue.add(p.child.get(i));
+                    }
+                }
+                n--;
+            }
+        }
+
+        return brother;
     }
 
     public static void main(String[] args) {
@@ -207,9 +267,29 @@ public class FamilyTree {
             System.out.println("All the brother/s of " + input + " : " + returnResult);
         }
 
-       /* 4) Who is the oldest brother of p?
-          5) Who is the youngest brother of p?
-          6) Who is the oldest son of p? .
+        /* 4) Who is the oldest brother of p? */
+        input = "Brian";
+        returnStrNode = familyTree.findOldestBrother(input, root);
+        if (returnStrNode != input && returnStrNode != "") {
+            System.out.println("Oldest brother of "+input +" is :" + returnStrNode);
+        }else if(returnStrNode == input){
+            System.out.println(input + " is single/oldest child.");
+        }else {
+            System.out.println("No brother/s of "+input);
+        }
+
+        /* 5) Who is the youngest brother of p? */
+        input = "Brian";
+        returnStrNode = familyTree.findYoungestBrother(input, root);
+        if (returnStrNode != input && returnStrNode != "") {
+            System.out.println("Youngest brother of "+input +" is :" + returnStrNode);
+        }else if(returnStrNode == input){
+            System.out.println(input + " is a single/youngest child.");
+        }else {
+            System.out.println("No brother/s of "+input);
+        }
+
+          /*6) Who is the oldest son of p? .
           7) Who is the youngest son of p?
           8) Who are the uncles of p?
           9) Who is the grandfather of p?*/
