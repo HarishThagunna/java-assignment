@@ -80,13 +80,13 @@ public class FamilyTree {
                 Node p = queue.peek();
                 queue.remove();
 
-                System.out.print(p.key + " ");
+//                System.out.print(p.key + " ");
 
                 // Enqueue all children of
-                // the dequeued item
+                // the de-queued item
                 for (int i = 0; i < p.child.size(); i++)
                 {
-                    System.out.println("Child-findFather--- "+p.child.get(i).key);
+//                    System.out.println("Child-findFather--- "+p.child.get(i).key);
                     if(p.child.get(i).key == child){
                         father = p.key;
                         return father;
@@ -138,7 +138,7 @@ public class FamilyTree {
     public ArrayList<String> findAllTheBrothers(String input, Node root){
         ArrayList<String> brothers = new ArrayList<>();
         String father = findFather(input,root);
-        System.out.println("father ===== " + father);
+//        System.out.println("father ===== " + father);
         brothers = findAllTheSons(father,root);
         brothers.remove(input);;
         return brothers;
@@ -263,6 +263,27 @@ public class FamilyTree {
         return son;
     }
 
+    public ArrayList<String> findAllUncles(String bhatiz, Node root){
+        ArrayList<String> uncles = new ArrayList<>();
+        String father = findFather(bhatiz,root);
+//        System.out.println("father ===== " + father);
+        if(father != "") {
+            uncles = findAllTheBrothers(father,root);
+        }
+
+        return uncles;
+    }
+
+    public String findGrandfather(String nati, Node root){
+        String grandFather = "";
+        String father = findFather(nati, root);
+        if(father != "") {
+            grandFather = findFather(father,root);
+        }
+        return grandFather;
+    }
+
+
     public static void main(String[] args) {
         /*
          *      Jones
@@ -365,8 +386,25 @@ public class FamilyTree {
         }else {
             System.out.println("No son/s of "+input +" found. ");
         }
-          /*8) Who are the uncles of p?
-          9) Who is the grandfather of p?*/
+
+        /*8) Who are the uncles of p? */
+        input = "Jones";
+        returnResult = familyTree.findAllUncles(input, root);
+        if(returnResult.size()==0){
+            System.out.println(input + " doesn't have any uncle/s.\n");
+        }else {
+            System.out.println("All the uncle/s of "+input+ " : "+returnResult);
+
+        }
+
+         /* 9) Who is the grandfather of p?*/
+        input = "Bob";
+        returnStrNode = familyTree.findGrandfather(input, root);
+        if (returnStrNode !="") {
+            System.out.println("Grandfather of "+input +" is :" + returnStrNode);
+        }else {
+            System.out.println("No grandfather of "+input +" found. ");
+        }
     }
 
 }
