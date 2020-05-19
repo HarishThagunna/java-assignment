@@ -204,6 +204,65 @@ public class FamilyTree {
         return brother;
     }
 
+    public String findOldestSon(String father, Node root){
+        String son = "";
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root); // Enqueue root
+        while (!queue.isEmpty())
+        {
+            int n = queue.size();
+
+            while (n > 0)
+            {
+                Node p = queue.peek();
+                queue.remove();
+
+                if(p.key == father && p.child.size() != 0){
+                    son = p.child.get(0).key;
+                    return son;
+                }
+
+                for (int i = 0; i < p.child.size(); i++)
+                {
+                    queue.add(p.child.get(i));
+                }
+
+                n--;
+            }
+        }
+        return son;
+    }
+
+    public String findYoungestSon(String father, Node root){
+        String son = "";
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root); // Enqueue root
+        while (!queue.isEmpty())
+        {
+            int n = queue.size();
+
+            while (n > 0)
+            {
+                Node p = queue.peek();
+                queue.remove();
+
+                if(p.key == father && p.child.size() != 0){
+                    son = p.child.get(p.child.size()-1).key;
+                    return son;
+                }
+
+                for (int i = 0; i < p.child.size(); i++)
+                {
+                    queue.add(p.child.get(i));
+                }
+                n--;
+            }
+        }
+        return son;
+    }
+
     public static void main(String[] args) {
         /*
          *      Jones
@@ -289,9 +348,24 @@ public class FamilyTree {
             System.out.println("No brother/s of "+input);
         }
 
-          /*6) Who is the oldest son of p? .
-          7) Who is the youngest son of p?
-          8) Who are the uncles of p?
+        /*6) Who is the oldest son of p? .*/
+        input = "Bill";
+        returnStrNode = familyTree.findOldestSon(input, root);
+        if (returnStrNode !="") {
+            System.out.println("Oldest son of "+input +" is :" + returnStrNode);
+        }else {
+            System.out.println("No son/s of "+input +" found. ");
+        }
+
+        /* 7) Who is the youngest son of p? */
+        input = "Jones";
+        returnStrNode = familyTree.findYoungestSon(input, root);
+        if (returnStrNode !="") {
+            System.out.println("Youngest son of "+input +" is :" + returnStrNode);
+        }else {
+            System.out.println("No son/s of "+input +" found. ");
+        }
+          /*8) Who are the uncles of p?
           9) Who is the grandfather of p?*/
     }
 
