@@ -58,6 +58,50 @@ public class FamilyTree {
         }
     }
 
+    public String findFather(String child, Node root){
+        String father = "";
+
+        if (root == null)
+            return null;
+
+        // Standard level order traversal code
+        // using queue
+        Queue<Node> queue = new LinkedList<>(); // Create a queue
+        queue.add(root); // Enqueue root
+        while (!queue.isEmpty())
+        {
+            int n = queue.size();
+
+            // If this node has children
+            while (n > 0)
+            {
+                // Dequeue an item from queue
+                // and print it
+                Node p = queue.peek();
+                queue.remove();
+
+                System.out.print(p.key + " ");
+
+                // Enqueue all children of
+                // the dequeued item
+                for (int i = 0; i < p.child.size(); i++)
+                {
+                    System.out.println("Child-findFather--- "+p.child.get(i).key);
+                    if(p.child.get(i).key == child){
+                        father = p.key;
+                        return father;
+                    }else{
+                        queue.add(p.child.get(i));
+                    }
+
+                }
+                n--;
+            }
+        }
+
+        return father;
+    }
+
     public ArrayList<String> findAllTheSons(String father, Node root){
         ArrayList<String> sons = new ArrayList<>();
 
@@ -91,6 +135,15 @@ public class FamilyTree {
         return sons;
     }
 
+    public ArrayList<String> findAllTheBrothers(String input, Node root){
+        ArrayList<String> brothers = new ArrayList<>();
+        String father = findFather(input,root);
+        System.out.println("father ===== " + father);
+        brothers = findAllTheSons(father,root);
+        brothers.remove(input);;
+        return brothers;
+    }
+
     public static void main(String[] args) {
         /*
          *      Jones
@@ -104,6 +157,7 @@ public class FamilyTree {
 
         FamilyTree familyTree = new FamilyTree();
         ArrayList<String> returnResult = new ArrayList<>();
+        String returnStrNode = "";
         String input;
 
         Node root = newNode("Jones");
@@ -125,7 +179,14 @@ public class FamilyTree {
 
         System.out.println("\n\n-------Operations-------\n");
 
-        //familyTree.findFather("Bob", root);
+        /*1) Who is the father of p? */
+        input = "Bob";
+        returnStrNode = familyTree.findFather(input, root);
+        if (returnStrNode !="") {
+            System.out.println("Father of "+input +" is :" + returnStrNode);
+        }else {
+            System.out.println("Father of "+input +" not found. Invalid input or input is root.");
+        }
 
         /* 2) Who are all the sons of p? */
         input = "Brian";
@@ -137,7 +198,21 @@ public class FamilyTree {
 
         }
 
+        /* 3) Who are all the brothers of p? */
+        input = "Bob";
+        returnResult = familyTree.findAllTheBrothers(input, root);
+        if(returnResult.size()==0){
+            System.out.println(input + " doesn't have any brother/s.\n");
+        }else {
+            System.out.println("All the brother/s of " + input + " : " + returnResult);
+        }
 
+       /* 4) Who is the oldest brother of p?
+          5) Who is the youngest brother of p?
+          6) Who is the oldest son of p? .
+          7) Who is the youngest son of p?
+          8) Who are the uncles of p?
+          9) Who is the grandfather of p?*/
     }
 
 }
